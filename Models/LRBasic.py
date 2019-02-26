@@ -9,7 +9,6 @@ from Models.DataSet import DataSet
 class LearningRateBasic:
 
     def processLRBasic():
-
         # Obtain the data set from Dataset Class
         X_train, X_test, y_train, y_test = DataSet.getParticionedDataSet()
 
@@ -21,7 +20,7 @@ class LearningRateBasic:
 
         # Draw the ROC curve to check how much the model is capable of distinguishing between classes
         logit_roc_auc = roc_auc_score(y_test, log_model.predict(X_test))
-        fpr, tpr, thresholds = roc_curve(y_test, log_model.predict_proba(X_test)[:,1])
+        fpr, tpr, thresholds = roc_curve(y_test, log_model.predict_proba(X_test)[:, 1])
         plt.figure()
         plt.plot(fpr, tpr, label='Logistic Regression (area = %0.2f)' % logit_roc_auc)
         plt.plot([0, 1], [0, 1], 'r--')
@@ -33,4 +32,3 @@ class LearningRateBasic:
         plt.legend(loc="lower right")
         plt.savefig('../Log_ROC')
         plt.show()
-

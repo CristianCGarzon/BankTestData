@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import DictVectorizer as dictV
+from imblearn.over_sampling import SMOTE
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -79,4 +80,17 @@ class DataSet:
         # print("y_test: \n", len(y_test))
 
         return X_train, X_test, y_train, y_test
+
+    def getParticionedDataSetOverSampled():
+
+        X_train, X_test, y_train, y_test = DataSet.getParticionedDataSet()
+
+        # Using SMOTE to over sample the examples and get the classes balanced.
+        os = SMOTE(random_state=0)
+        columns = X_train.columns
+        os_data_X, os_data_y = os.fit_sample(X_train, y_train)
+        os_data_X = pd.DataFrame(data=os_data_X, columns=columns)
+        os_data_y = pd.DataFrame(data=os_data_y, columns=['y'])
+
+        return os_data_X, os_data_y, X_test, y_test
 
