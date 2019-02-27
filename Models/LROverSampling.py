@@ -4,7 +4,7 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
 from Models.DataSet import DataSet
-
+from sklearn.externals import joblib
 
 class LearningRateOverSampling:
 
@@ -12,10 +12,15 @@ class LearningRateOverSampling:
         os_data_X, os_data_y, X_test, y_test = DataSet.getParticionedDataSetOverSampled()
 
         # Creating a logisitc regression model
-        log_model = LogisticRegression()
+        # log_model = LogisticRegression()
+        log_model = LogisticRegression(C=0.1, solver='liblinear')
         log_model.fit(os_data_X, os_data_y.values.ravel())
         y_pred = log_model.predict(X_test)
         print("The classification report of LrOverSampling is: \n", classification_report(y_test, y_pred))
+
+        # Save the model to re use later
+        filename = '../LROverSampling.sav'
+        joblib.dump(log_model, filename)
 
         # Draw the ROC curve to check how much the model is capable of distinguishing between classes
         logit_roc_auc = roc_auc_score(y_test, log_model.predict(X_test))

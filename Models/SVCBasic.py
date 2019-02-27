@@ -6,7 +6,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
 
 from Models.DataSet import DataSet
-
+from sklearn.externals import joblib
 
 class SupportVectorClassifier:
 
@@ -17,13 +17,17 @@ class SupportVectorClassifier:
 
         os_data_X, os_data_y, X_test, y_test = DataSet.getParticionedDataSetOverSampled()
 
-        svclassifier = SVC(kernel='linear', C=1)
-        svclassifier.fit(os_data_X, os_data_y.values.ravel())
-        y_pred = svclassifier.predict(X_test)
+        svc_classifier = SVC(kernel='linear', C=1)
+        svc_classifier.fit(os_data_X, os_data_y.values.ravel())
+        y_pred = svc_classifier.predict(X_test)
         print(confusion_matrix(y_test, y_pred))
         print(classification_report(y_test, y_pred))
 
         print("\nFinish time: " + str(datetime.now()))
+
+        # Save the model to re use later
+        filename = '../LROverSampling.sav'
+        joblib.dump(svc_classifier, filename)
 
         """
         # Draw the ROC curve to check how much the model is capable of distinguishing between classes
